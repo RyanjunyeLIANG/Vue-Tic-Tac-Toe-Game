@@ -1,6 +1,7 @@
-# vuetictactoe
+# vue tic-tac-toe game
 
 > Vue tictactoe game
+For best performance, please run through google chrome browser.
 
 ## Build Setup
 
