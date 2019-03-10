@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="flex">
-        <router-link to="/multiplayer" class="bttn">Multiplayer</router-link>
+        <router-link to="/multiplayer" class="bttn" v-on:click.native="refresh">Multiplayer</router-link>
         <span>     </span>
         <router-link to="/computer" class="bttn-dark">A.I</router-link>
     </div>
@@ -11,7 +11,12 @@
 
 <script>
 export default {
-    name: 'app'
+    name: 'app',
+    methods: {
+      refresh:function() {
+        this.$router.go(0)
+      }
+    }
 }
 </script>
 
