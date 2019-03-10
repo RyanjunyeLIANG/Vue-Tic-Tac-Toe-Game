@@ -15,7 +15,7 @@ export default {
     name: 'app',
     data() {
       return {
-        msg: "Tic Tac Toc test",
+        msg: "Tic Tac Toc",
       }
     }
 }
@@ -51,6 +51,7 @@ body {
 }
 
 h1 {
+  font-size: 40px;
   text-align: center;
 }
 
@@ -67,6 +68,7 @@ h1 {
 
 a.bttn {
   color:$primary;
+  margin-right: 50px;
   text-decoration:none;
   -webkit-transition:0.3s all ease;
   transition:0.3s ease all;

@@ -1,37 +1,38 @@
 <template>
     <div id="app">
         <div>
-            <div v-show="entryShow">
-                <input v-model="player1[0]" placeholder="player1's Name">
+            <div v-show="entryShow" class="table2">
+                <div class="alert alert-info" v-show="errorShow">{{ error }}</div>
+                <input type="text" class="form-control" maxlength="10" v-model="player1[0]" placeholder="player1's Name">
                 <p></p>
-                <input v-model="player2[0]" placeholder="player2's Name">
+                <input type="text" class="form-control" maxlength="10" v-model="player2[0]" placeholder="player2's Name">
                 <p></p>
             </div>
             <div>
             </div>
         </div>        
-        <a class="bttn2" v-on:click="gameStart" v-show="buttonShow">Start</a>
+        <a class="bttn2" v-on:click="checkInput" v-show="buttonShow">Start</a>
         <div v-show="componentShow">
             <div class="table1">
                 <table>
                     <tr>
                         <th>
-                            <tr class="player">Player1</tr>
-                            <tr> {{player1[0]}} </tr>
+                            <tr :class="player1Background">Player1</tr>
+                            <tr class="player" :class="player1Background"> {{ player1[0] }} </tr>
                         </th>
                         <th>
-                            <tr class="player">Symbol</tr>
-                            <tr>{{ player1[1] }}</tr>
+                            <tr :class="player1Background">Symbol</tr>
+                            <tr class="player" :class="player1Background">{{ player1[1] }}</tr>
                         </th>
                     </tr>
                     <tr>
                         <th>
-                            <tr class="player">Player2</tr>
-                            <tr> {{player2[0]}} </tr>
+                            <tr :class="player2Background">Player2</tr>
+                            <tr class="player" :class="player2Background"> {{ player2[0] }} </tr>
                         </th>
                         <th>
-                            <tr class="player">Symbol</tr>
-                            <tr>{{ player2[1] }}</tr>
+                            <tr :class="player2Background">Symbol</tr>
+                            <tr class="player" :class="player2Background">{{ player2[1] }}</tr>
                         </th>
                     </tr>
                 </table>
@@ -67,10 +68,12 @@
 import Cell from './Cell.vue'
 
 export default {
-    name: 'Grid',
+    name: 'Multiplayer',
     components: { Cell },
     data() {
         return {
+            error: '',
+            errorShow: false,
             buttonShow: true,
             componentShow: false,
             entryShow: true,
@@ -81,6 +84,8 @@ export default {
             actName: '',
             gameStatus: 'onGoing',
             gameStatusColor: '',
+            player1Background: 'highLight',
+            player2Background: '',
             gameStatusMessage: ``,
             moves: 0,
             cells: {
@@ -106,6 +111,24 @@ export default {
     },
 
     methods: {
+        checkInput: function() {
+            if(this.player1[0] && this.player2[0]) {
+                this.gameStart()
+            }
+            if(this.player2[0] && !this.player1[0]) {
+                this.error = 'Please enter a name for Player 1'
+                this.errorShow = true
+            }
+            if(this.player1[0] && !this.player2[0]) {
+                this.error = 'Please enter a name for Player 2'
+                this.errorShow = true
+            }
+            if(!this.player1[0] && !this.player2[0]) {
+                this.error = 'Please name for both Players'
+                this.errorShow = true
+            }
+        },
+
         gameStart: function() {
             this.buttonShow = false
             this.componentShow = true
@@ -123,7 +146,7 @@ export default {
             else {
                 this.actName = this.player2[0]
             }
-            this.gameStatusMessage = `${this.actPlayer}, ${this.actName}'s turn`
+            this.gameStatusMessage = `${this.actName}'s turn`
         },
 
         shapeSelect: function() {
@@ -153,7 +176,7 @@ export default {
 
                 if(cellA && cellA === cellB && cellA === cellC) {
                     this.gameStatus = 'Completed'
-                        this.gameStatusMessage = `${this.actPlayer}, ${this.actName} win!`
+                        this.gameStatusMessage = `${this.actName} win!`
                     Event.$emit('lockCells')
                 }
             })
@@ -170,7 +193,7 @@ export default {
             this.actPlayer = 'O'
             this.gameStatus = 'onGoing',
             this.gameStatusColor = '',
-            this.gameStatusMessage = `${this.actPlayer}, ${this.actName}'s turn` 
+            this.gameStatusMessage = `${this.actName}'s turn` 
             this.moves = 0,
             this.cells = {
                 1: '', 2: '', 3: '',
@@ -189,6 +212,16 @@ export default {
         gameStatus: function() {
             if(this.gameStatus === 'Completed') {
                 this.gameStatusColor = 'winner'
+            }
+        },
+        actPlayer: function() {
+            if(this.actPlayer === this.player1[1]) {
+                this.player1Background = 'highLight'
+                this.player2Background = ''
+            }
+            else {
+                this.player2Background = 'highLight'
+                this.player1Background = ''
             }
         },
     },
@@ -241,6 +274,7 @@ body {
 
 table {
     text-align: center;
+    vertical-align: middle;
     width: 100%;
 }
 
@@ -249,6 +283,12 @@ table {
     margin-top: 40px;
     margin-bottom: 10px;
     margin-left: 25px;
+}
+
+.table2 {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 30px;
 }
 
 .flex {
@@ -374,14 +414,6 @@ a.bttn2 {
  }
 }
 
-input[Type=text] {
-  width: 100%;
-  height: 150px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-}
-
 .grid {
   background-color: #34495e;
   color: #fff;
@@ -403,9 +435,15 @@ input[Type=text] {
 .player {
     font-size: 1.4em;
     font-weight: bold;
+    color:#2c3e50
 }
 
 .winner {
     color: firebrick;
+}
+
+.highLight {
+    text-decoration: underline red;
+    color: red;
 }
 </style>
