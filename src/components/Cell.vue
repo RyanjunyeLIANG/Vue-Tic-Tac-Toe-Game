@@ -1,5 +1,5 @@
 <template>
-    <td class="cell" v-on:click="hit">{{ mark }}</td>
+    <td class="cell" v-on:click="hit">{{ mark }}</td> <!--cell container and hitAi trigger -->
 </template>
 
 <script>
@@ -12,6 +12,7 @@
       }
     },
     methods: {
+      //Run whenever this cell has been hit
       hit() {
         if(!this.cellLocked) {
           this.mark = this.$parent.actPlayer
@@ -22,6 +23,7 @@
       }
     },
 
+    //Constantly listen to Events fired by parent component Multiplayer.vue
     created() {
       Event.$on('clearCells', () => {
         this.cellLocked = false

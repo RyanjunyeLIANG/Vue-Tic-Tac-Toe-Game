@@ -1,11 +1,12 @@
 <template>
     <div id="app">
-        <h1 class="buttonA"> {{ chooseName }} </h1>
+        <h1 class="buttonA"> {{ chooseName }} </h1> <!-- Show the random choosed name -->
         <div>Do you think you can beat me? </div>
-        <div v-show="buttonShow">
+        <div v-show="buttonShow"> <!-- buttons' container -->
             <a herf="#" v-on:click="gameStart" class="bttn2 buttonA">Start</a>
             <a herf="#" v-on:click="nameChange" class="bttn1 buttonA">Change name</a>
         </div>   
+        <!-- board container -->
         <div class="chessBoard" v-show="boardShow">
             <div class="gameStatus" :class="gameStatusColor">
                 {{ gameStatusMessage }}
@@ -28,7 +29,7 @@
                 </tr>
             </table>
         </div>
-        <div class="flex" v-show="boardShow">
+        <div class="flex" v-show="boardShow">  <!-- restart button -->
             <a v-on:click="restart" class="bttn1">Restart</a>
         </div>
     </div>
@@ -42,7 +43,7 @@ export default {
     components: { CellAi },
     data() {
         return {
-            playerName: ['Ryan', 'Nicole', 'Chris', 'Christine', 'Faker', 'Bruce', 'Summer'],
+            playerName: ['Ryan', 'Nicole', 'Chris', 'Christine', 'Faker', 'Bruce', 'Summer'], //Name pool array
             buttonShow: true,
             boardShow: false,
             chooseName: '',
@@ -66,6 +67,7 @@ export default {
     },
 
     computed: {
+        //OtherPlayer value support function for changePlayer()
         otherPlayer: function() {
             if(this.actPlayer === 'O') {
                 return 'X'
@@ -73,6 +75,7 @@ export default {
             return 'O'
         },
 
+        //OtherTurn value support function for changePlayer()
         otherTurn: function() {
             if(this.turn === 'Player') {
                 return 'Ai'
@@ -80,6 +83,7 @@ export default {
             return 'Player'
         },
 
+        //Define winner and comments
         winner: function() {
             if(this.turn === 'Player') {
                 return 'You Win!!'
@@ -87,6 +91,7 @@ export default {
             return `I beat you! ${this.chooseName}!`
         },
 
+        //To find available cells and choose a random one between them for Ai
         randomAvailableNumber: function() {
             var moveArr = []
             var arr = []
@@ -105,16 +110,19 @@ export default {
     },
 
     methods: {
+        // Game start trigger
         gameStart: function() {
             this.boardShow = true
             this.buttonShow = false
         },
 
+        // Random choose a name from the name pool
         nameChange: function() {
             let ranNumber = Math.round(Math.random() * (this.playerName.length-1))
             this.chooseName = this.playerName[ranNumber]
         },
 
+        //Check the winner and the win conditions
         checkWinner: function() {
             if(this.moves >= 9) {
                 this.gameStatus = 'Draw'
@@ -131,11 +139,12 @@ export default {
                 if(cellA && cellA === cellB && cellA === cellC) {
                     this.gameStatus = 'Completed'
                         this.gameStatusMessage = `${this.winner}`
-                    Event.$emit('lockCellsAi')
+                    Event.$emit('lockCellsAi') //Fire lockCellAi event to CellAi component
                 }
             })
         },
 
+        //Reset the board for new game
         boardReset: function() {
             this.actPlayer = 'O'
             this.turn = 'Player'
@@ -150,17 +159,20 @@ export default {
             }
         },
 
+        //Ai move
         aiMove: function() {
             if(this.turn === 'Ai' && this.gameStatus === 'onGoing') {
                 this.aiClick(this.randomAvailableNumber)
             }
         },
 
+        //Triggered by restart button 
         restart: function() {
             this.boardReset()
-            Event.$emit('clearCellsAi')
+            Event.$emit('clearCellsAi') // Fire clearCellsAi event to cellsAi component
         },
 
+        //change Player and turn
         changePlayer: function() {
             if(this.gameStatus === 'onGoing') {
                 this.actPlayer = this.otherPlayer
@@ -168,6 +180,7 @@ export default {
             }
         },
 
+        //Similate a click to selected cell for AI
         aiClick: function(cellClick) {
             if(cellClick === 1) {
                 this.$refs.cell1.hitAi()
@@ -199,7 +212,9 @@ export default {
         },
     },
 
+    //Watch the data change to perform certain changes
     watch: {
+        //gameStatus data watch to change the status window color
         gameStatus: function() {
             if(this.gameStatus === 'Completed') {
                 this.gameStatusColor = 'winner'
@@ -207,6 +222,7 @@ export default {
         },
     },
 
+    //Initiate the first time random name choose and constantly listen hitAi event
     created() {
         this.nameChange()
         Event.$on('hitAi', (cellNumber) => {
@@ -427,6 +443,7 @@ a.bttn2 {
     font-weight: bold;
 }
 
+//winner color for status window
 .winner {
     color: firebrick;
 }

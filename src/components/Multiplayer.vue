@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <div>
+            <!--- Player names input  --->
             <div v-show="entryShow" class="table2">
                 <div class="alert alert-info" v-show="errorShow">{{ error }}</div>
                 <input type="text" class="form-control" maxlength="10" v-model="player1[0]" placeholder="player1's Name">
@@ -10,10 +11,10 @@
             </div>
             <div>
             </div>
-        </div>        
-        <a class="bttn2" v-on:click="checkInput" v-show="buttonShow">Start</a>
+        </div>      
+        <a class="bttn2" v-on:click="checkInput" v-show="buttonShow">Start</a>   <!--- Start button  --->  
         <div v-show="componentShow">
-            <div class="table1">
+            <div class="table1">    <!--- Table of players' information  --->  
                 <table>
                     <tr>
                         <th>
@@ -37,9 +38,10 @@
                     </tr>
                 </table>
             </div>
-            <div class="gameStatus" :class="gameStatusColor">
+            <div class="gameStatus" :class="gameStatusColor">   <!--- Game Status window  --->  
                 {{ gameStatusMessage }}
             </div>
+            <!--- Board grid  --->  
             <table class="grid">
                 <tr>
                     <cell name="1"></cell>
@@ -58,7 +60,7 @@
                 </tr>
             </table>
         </div>
-        <div class="flex" v-show="gridShow">
+        <div class="flex" v-show="gridShow">    <!--- Restart button --->  
             <a v-on:click="restart" class="bttn1">Restart</a>
         </div>
     </div>
@@ -102,6 +104,7 @@ export default {
     },
 
     computed: {
+        //OtherPlayer value support function for changePlayer()
         otherPlayer: function() {
             if(this.actPlayer === 'O') {
                 return 'X'
@@ -111,6 +114,7 @@ export default {
     },
 
     methods: {
+        //Input check function
         checkInput: function() {
             if(this.player1[0] && this.player2[0]) {
                 this.gameStart()
@@ -129,6 +133,7 @@ export default {
             }
         },
 
+        //game Start trigger function
         gameStart: function() {
             this.buttonShow = false
             this.componentShow = true
@@ -139,6 +144,7 @@ export default {
             this.verifyPlayer()
         },
 
+        //Player verification
         verifyPlayer: function() {
             if(this.actPlayer === this.player1[1]) {
                 this.actName = this.player1[0]
@@ -149,6 +155,7 @@ export default {
             this.gameStatusMessage = `${this.actName}'s turn`
         },
 
+        //Random shape arragement function
         shapeSelect: function() {
             let randomNumber = Math.round(Math.random() * 1)
             if(randomNumber === 1) {
@@ -161,13 +168,15 @@ export default {
             }
         },
 
+        //Check the winner and win condition
         checkWinner: function() {
             if(this.moves >= 9) {
                 this.gameStatus = 'Draw'
                 this.gameStatusMessage = `It's a Draw!`
-                Event.$emit('lockCells')
+                Event.$emit('lockCells') //Lockcells event fire to trigger each cells components to call functions, event listen at Cell.vue
             }
 
+            //Win condition check
             this.winConditions.forEach((wc) => {
                 const [a,b,c] = wc;
                 const cellA = this.cells[a];
@@ -182,6 +191,7 @@ export default {
             })
         },
 
+        //change active player after clicked
         changePlayer: function() {
             if(this.gameStatus === 'onGoing') {
                 this.actPlayer = this.otherPlayer
@@ -189,6 +199,7 @@ export default {
             }
         },
 
+        //Reset the reletive data of the board for new game
         boardReset: function() {
             this.actPlayer = 'O'
             this.gameStatus = 'onGoing',
@@ -202,18 +213,23 @@ export default {
             }
         },
 
+        //Restart button click trigger function
         restart: function() {
             this.boardReset()
             Event.$emit('clearCells')
         },
     },
 
+    //Watch data change to perform certain changes
     watch: {
+        //Watch gameStatus's value change to change the status window background color
         gameStatus: function() {
             if(this.gameStatus === 'Completed') {
                 this.gameStatusColor = 'winner'
             }
         },
+
+        //Watch actPlayer's value change to change the color of the player's information
         actPlayer: function() {
             if(this.actPlayer === this.player1[1]) {
                 this.player1Background = 'highLight'
@@ -226,6 +242,7 @@ export default {
         },
     },
 
+    //Initial the event to constantly listen "hit" event from Cell.vue
     created() {
         Event.$on('hit', (cellNumber) => {
             this.cells[cellNumber] = this.actPlayer
@@ -438,10 +455,12 @@ a.bttn2 {
     color:#2c3e50
 }
 
+//Status window text color change
 .winner {
     color: firebrick;
 }
 
+//Player information text color change
 .highLight {
     text-decoration: underline red;
     color: red;
