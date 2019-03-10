@@ -1,20 +1,21 @@
 <template>
 <div>
+    <h1>{{ msg }}</h1>
     <div class="flex">
-        <router-link to="/multiplayer" class="bttn" v-on:click.native="refresh">Multiplayer</router-link>
+        <router-link to="/multiplayer" class="bttn">Multiplayer</router-link>
         <span>     </span>
         <router-link to="/computer" class="bttn-dark">A.I</router-link>
     </div>
-    <router-view></router-view>
+    <keep-alive><router-view></router-view></keep-alive>
 </div>
 </template>
 
 <script>
 export default {
     name: 'app',
-    methods: {
-      refresh:function() {
-        this.$router.go(0)
+    data() {
+      return {
+        msg: "Tic Tac Toc test",
       }
     }
 }
@@ -47,6 +48,10 @@ body {
   font-family:$font;
   background: #F5F0FF;
   -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  text-align: center;
 }
 
 .dark {

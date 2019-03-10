@@ -1,19 +1,41 @@
 <template>
     <div id="app">
         <div>
-            <h1>{{ msg }}</h1>
             <div v-show="entryShow">
                 <input v-model="player1[0]" placeholder="player1's Name">
+                <p></p>
                 <input v-model="player2[0]" placeholder="player2's Name">
-                <p>Player1 Name: {{ player1[0] }}</p>
-                <p>Player2 Name: {{ player2[0] }}</p>
+                <p></p>
             </div>
             <div>
             </div>
         </div>        
-        <button v-on:click="gameStart" v-show="buttonShow">Start</button>
+        <a class="bttn2" v-on:click="gameStart" v-show="buttonShow">Start</a>
         <div v-show="componentShow">
-            <p>{{ player1 }}</p><span>{{ actPlayer }}</span>
+            <div class="table1">
+                <table>
+                    <tr>
+                        <th>
+                            <tr class="player">Player1</tr>
+                            <tr> {{player1[0]}} </tr>
+                        </th>
+                        <th>
+                            <tr class="player">Symbol</tr>
+                            <tr>{{ player1[1] }}</tr>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <tr class="player">Player2</tr>
+                            <tr> {{player2[0]}} </tr>
+                        </th>
+                        <th>
+                            <tr class="player">Symbol</tr>
+                            <tr>{{ player2[1] }}</tr>
+                        </th>
+                    </tr>
+                </table>
+            </div>
             <div class="gameStatus" :class="gameStatusColor">
                 {{ gameStatusMessage }}
             </div>
@@ -49,7 +71,6 @@ export default {
     components: { Cell },
     data() {
         return {
-            msg: "Tic Tac Toc test",
             buttonShow: true,
             componentShow: false,
             entryShow: true,
@@ -188,6 +209,7 @@ export default {
 
 $font:'Source Sans Pro', sans-serif;
 $forth:rgba(10, 184, 77, 0.979);
+$fifth:rgb(29, 26, 26);
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -217,8 +239,20 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+table {
+    text-align: center;
+    width: 100%;
+}
+
+.table1 {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    margin-left: 25px;
+}
+
 .flex {
-  min-height:20vh;
+  min-height:2vh;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -279,7 +313,73 @@ a.bttn1 {
       right:0;
       opacity:1;
     }
+ }
+}
+
+a.bttn2 {
+  color:$fifth;
+  text-decoration:none;
+  -webkit-transition:0.3s all ease;
+  transition:0.3s ease all;
+  &:hover {
+    color:#FFF;
   }
+  &:focus {
+    color:#FFF;
+  }
+}
+
+.bttn2 {
+  font-size:18px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  display:inline-block;
+  text-align:center;
+  width:270px;
+  font-weight:bold;
+  padding:14px 0px;
+  border:3px solid $fifth;
+  border-radius:2px;
+  position:relative;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.1);
+  &:before {
+    -webkit-transition:0.5s all ease;
+    transition:0.5s all ease;
+    position:absolute;
+    top:0;
+    left:50%;
+    right:50%;
+    bottom:0;
+    opacity:0;
+    content:'';
+    background-color:$fifth;
+    z-index:-2;
+  }
+  &:hover {
+    &:before {
+      -webkit-transition:0.5s all ease;
+      transition:0.5s all ease;
+      left:0;
+      right:0;
+      opacity:1;
+    }
+  }
+  &:focus {
+    &:before {
+      transition:0.5s all ease;
+      left:0;
+      right:0;
+      opacity:1;
+    }
+ }
+}
+
+input[Type=text] {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
 }
 
 .grid {
@@ -298,6 +398,11 @@ a.bttn1 {
   color: #fff;	
   font-size: 1.4em;
   font-weight: bold;
+}
+
+.player {
+    font-size: 1.4em;
+    font-weight: bold;
 }
 
 .winner {
