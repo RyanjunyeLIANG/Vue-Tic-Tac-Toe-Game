@@ -11,12 +11,12 @@ export default new VueRouter({
         {
             path: '/multiplayer',
             name: 'Multiplayer',
-            component: Multiplayer
+            component: Multiplayer  //Multiplayer component
         },
         {
             path: '/Computer',
             name: 'computer',
-            component: Computer
+            component: Computer  //Computer component
         }
     ]
 })

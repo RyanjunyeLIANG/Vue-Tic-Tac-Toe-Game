@@ -1,12 +1,12 @@
 <template>
 <div>
-    <h1>{{ msg }}</h1>
-    <div class="flex">
+    <h1>{{ msg }}</h1> <!--- Receive data.msg value  --->
+    <div class="flex"> <!--- router-link buttons container  --->
         <router-link to="/multiplayer" class="bttn">Multiplayer</router-link>
         <span>     </span>
         <router-link to="/computer" class="bttn-dark">A.I</router-link>
     </div>
-    <keep-alive><router-view></router-view></keep-alive>
+    <keep-alive><router-view></router-view></keep-alive> <!--- components view and keep it stay in the browser when switch the router  --->
 </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
     name: 'app',
     data() {
       return {
-        msg: "Tic Tac Toc",
+        msg: "Tic Tac Toc", //header message send to <h1>
       }
     }
 }
@@ -24,7 +24,7 @@ export default {
 
 <style lang="scss">
 
-$font:'Source Sans Pro', sans-serif;
+$font:'Source Sans Pro', sans-serif; 
 $primary:#FF0072;
 $second:#644cad;
 $third:#4426a8;
